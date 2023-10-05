@@ -7,7 +7,6 @@ import User from '../../entities/user.entity'
 import AppDataSource from '../../data-source'
 import { hash } from 'bcryptjs'
 import { userResponseSchema } from '../../schemas/user.schemas'
-import AppError from '../../errors/appError'
 
 const createUserService = async (
   userData: TUserRequest
@@ -15,16 +14,6 @@ const createUserService = async (
   const { name, email, password } = userData
 
   const userRepository: Repository<User> = AppDataSource.getRepository(User)
-
-  const findUser: User | null = await userRepository.findOne({
-    where: {
-      email
-    }
-  })
-
-  if (findUser !== null) {
-    throw new AppError('User Already Exists', 409)
-  }
 
   const hashedPassword = await hash(password, 10)
 

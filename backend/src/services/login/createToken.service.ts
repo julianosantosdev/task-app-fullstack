@@ -22,11 +22,9 @@ const createTokenService = async (
     }
   })
 
-  if (user === null) {
-    throw new AppError('Invalid Credentials', 403)
-  }
+  const userPassword = user?.password as string
 
-  const passwordMatch = await compare(password, user.password)
+  const passwordMatch = await compare(password, userPassword)
 
   if (!passwordMatch) {
     throw new AppError('Invalid Credentials', 403)
@@ -34,10 +32,14 @@ const createTokenService = async (
 
   const secretKey = process.env.SECRET_KEY as string
 
-  const getToken: string = jwt.sign({ username: user.name }, secretKey, {
-    expiresIn: '24h',
-    subject: user.id
-  })
+  const getToken: string = jwt.sign(
+    { username: user?.name as string },
+    secretKey,
+    {
+      expiresIn: '24h',
+      subject: user?.id
+    }
+  )
 
   return { token: getToken }
 }
