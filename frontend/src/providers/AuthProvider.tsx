@@ -18,7 +18,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     const token = localStorage.getItem('myTaskApp:token');
     if (!token) {
       setLoading(false);
-      navigate('/');
+      return;
     }
     api.defaults.headers.common.Authorization = `Bearer ${token}`;
     setLoading(false);

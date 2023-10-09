@@ -24,15 +24,15 @@ const TaskCard = ({ task }: ITaskCardProps) => {
 
   return (
     <StyledTaskCard key={task.id}>
+      <h2>{task.title}</h2>
+      <p>{task.description}</p>
+
       <select onChange={updateTaskStatus} defaultValue={task.status}>
         <option value='To-Do'>To-Do</option>
         <option value='InProgress'>In Progress</option>
         <option value='InRevision'>In Revision</option>
         <option value='Finished'>Finished</option>
       </select>
-
-      <h2>{task.title}</h2>
-      <p>{task.description}</p>
     </StyledTaskCard>
   );
 };
