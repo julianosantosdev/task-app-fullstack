@@ -7,6 +7,7 @@ interface IAuthProviderProps {
 
 interface IAuthContextValues {
   signIn: (data: TLoginValidate) => Promise<void>;
+  loading: boolean;
 }
 
 export type { IAuthProviderProps, IAuthContextValues };

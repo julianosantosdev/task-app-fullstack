@@ -1,4 +1,4 @@
-import { createContext, useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import {
   IAuthContextValues,
   IAuthProviderProps,
@@ -12,11 +12,16 @@ const AuthContext = createContext({} as IAuthContextValues);
 const AuthProvider = ({ children }: IAuthProviderProps) => {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const token = localStorage.getItem('myTaskApp:token');
     if (!token) {
-      api.defaults.headers.common.Authorization = `Bearer ${token}`;
+      setLoading(false);
+      navigate('/');
     }
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+    setLoading(false);
   }, []);
 
   const signIn = async (data: TLoginValidate) => {
@@ -25,13 +30,16 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
       const token: string = response.data.token;
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
       localStorage.setItem('myTaskApp:token', token);
+      setLoading(false);
       navigate('/dashboard');
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <AuthContext.Provider value={{ signIn }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signIn, loading }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
